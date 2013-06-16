@@ -25,7 +25,7 @@ CONSUMER_SECRET = "alkyBWF4yidK20sb"
 OAUTH_TOKEN = "be8fa919-c03a-465b-b4b8-631cf4cd5eb9"
 OAUTH_TOKEN_SECRET = "e939a72d-8b7b-4278-bc05-f27014c20db3"
 
-start = 1101 # Starting location within the result set for paginated returns. Ranges are specified with a starting index and a number of results (count) to return. 
+start = 1103 # Starting location within the result set for paginated returns. Ranges are specified with a starting index and a number of results (count) to return. 
 count = 500 #number of results to return. You may specify any number. Default and max page size is 500. Implement pagination to retrieve more than 500 connections.
 #end = start + count - 1
 
@@ -40,11 +40,11 @@ def linkedin_connections():
 	consumer = oauth.Consumer(key=CONSUMER_KEY, secret=CONSUMER_SECRET)
 	token = oauth.Token(key=OAUTH_TOKEN, secret=OAUTH_TOKEN_SECRET)
 	client = oauth.Client(consumer, token)
-	
+
 	# daily limit per developer is 500 calls to the "People Search" API
 	# http://developer.linkedin.com/documents/throttle-limits
 	counter_GetConnectionProfile_APIcall = 0
-	cap_GCP_APIcalls = 500
+	cap_GCP_APIcalls = 2
 
 	# track how many connections been queried
 	counter_results = 0
@@ -53,7 +53,7 @@ def linkedin_connections():
 	v = "https://api.linkedin.com/v1/people/~/connections?format=json&start=%s&count=%s" % (start, count)
 	resp, content = client.request(v) 
 	results = json.loads(content)
-	
+
 	# File that will store the results
 	output = codecs.open(filename, 'w', 'utf-8')
 	output_ids = codecs.open(filename_ids, 'w', 'utf-8')
@@ -93,7 +93,7 @@ def linkedin_connections():
 		resp, content = client.request(u)
 		counter_GetConnectionProfile_APIcall += 1
 		rels = json.loads(content)
-		
+
 		try:
 			relatedConnectionsTotal = int(rels['relationToViewer']['relatedConnections']['_total'])
 			print relatedConnectionsTotal
@@ -108,11 +108,11 @@ def linkedin_connections():
 		if counter_GetConnectionProfile_APIcall >= cap_GCP_APIcalls:
 			print "API Call limit reached. %d call%s made to LinkedIn's Get Connection Profile API" % (counter_GetConnectionProfile_APIcall, "s"[counter_GetConnectionProfile_APIcall==1:])
 
-			if (relatedConnectionsTotal) > (mutualConnectionsStart):
-				z = counter_results
+			if (relatedConnectionsTotal) > (mutualConnectionsStart + 20):
+				z = counter_results - 1
 			else:
-				z = counter_results - 1 
-					
+				z = counter_results 
+
 			print "mutual connections retrieved for %d connection%s" % (z, "s"[z==1:])
 			return
 
@@ -124,26 +124,26 @@ def linkedin_connections():
 			resp, content = client.request(u)
 			counter_GetConnectionProfile_APIcall += 1
 			rels = json.loads(content)
-			
+
 			extract_connections(rels,con)
 
 			if counter_GetConnectionProfile_APIcall >= cap_GCP_APIcalls:
 				print "API Call limit reached. %d call%s made to LinkedIn's Get Connection Profile API" % (counter_GetConnectionProfile_APIcall, "s"[counter_GetConnectionProfile_APIcall==1:])
 
-				if (relatedConnectionsTotal) > (mutualConnectionsStart):
-					z = counter_results
+				if (relatedConnectionsTotal) > (mutualConnectionsStart + 20):
+					z = counter_results - 2
 				else:
-					z = counter_results - 2 
+					z = counter_results - 1 
 
 				print "complete set of mutual connections retrieved for %d connection%s" % (z, "s"[z==1:])
 				return
 
 	# Print some stats to the console 
 	print "%d call%s made to LinkedIn's Get Connection Profile API" % (counter_GetConnectionProfile_APIcall, "s"[counter_GetConnectionProfile_APIcall==1:]) 
-	
+
 	z = counter_results
 	print "mutual connections retrieved for %d connection%s" % (z, "s"[z==1:])
-		
+
 
 if __name__ == '__main__':
-		linkedin_connections()			
+		linkedin_connections()		

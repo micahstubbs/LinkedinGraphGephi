@@ -5,5 +5,5 @@
 *.json
 
 deprecated/
-
+test/
 "retrieved data store"/
