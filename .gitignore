@@ -1,0 +1,9 @@
+# ignore all files ending with .csv
+*.csv
+
+# ignore all files ending with .json
+*.json
+
+deprecated/
+
+"retrieved data store"/
