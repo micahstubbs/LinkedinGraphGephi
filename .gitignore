@@ -1,8 +1,8 @@
-# ignore all files ending with .csv
+# ignore all files ending with .csv, .json, .gephi or .png
 *.csv
-
-# ignore all files ending with .json
 *.json
+*.png
+*.gephi
 
 deprecated/
 test/

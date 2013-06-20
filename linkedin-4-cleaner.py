@@ -3,8 +3,7 @@
 """
 linkedin-4-cleaner.py
 
-Created by Thomas Cabrol on 2012-12-04.
-Copyright (c) 2012 dataiku. All rights reserved.
+Inspired by Thomas Cabrol
 
 Clean up and dedup the LinkedIn graph
 """
@@ -12,9 +11,11 @@ Clean up and dedup the LinkedIn graph
 import codecs
 from unidecode import unidecode
 from operator import itemgetter
+import re
+import csv
 
-INPUT = 'linked.csv'
-OUTPUT = 'linkedin.csv'
+INPUT = 'linked_total.csv'
+OUTPUT = 'linked_clean.csv'
 
 def stringify(chain):
     # Simple utility to build the nodes labels
@@ -22,15 +23,29 @@ def stringify(chain):
     c = unidecode(chain.strip().lower().replace(' ', '_'))
     return ''.join([letter for letter in c if letter in allowed])
 
+def stringify_regex(string):
+    result = str(string.strip().lower())
+    result = re.sub(r'\s+',r'_',result)
+    result = re.sub(r'\W+',r'',result)
+    return result
+
 
 def cleaner():
     output = open(OUTPUT, 'w')
     # Store the edges inside a set for dedup
     edges = set()
-    for line in codecs.open(INPUT, 'r', 'utf-8'):
-        from_person, to_person = line.strip().split(',')
-        _f = stringify(from_person)
-        _t = stringify(to_person)
+    data = csv.reader(open(INPUT))
+    for line in data:
+        while True:
+            try:
+                from_person = line[0]
+                to_person = line[1]               
+                _f = stringify_regex(from_person)
+                _t = stringify_regex(to_person)
+                break # got 2 strings, we can stop trying and do something useful with them.
+            except ValueError:
+                print "Oops, that wasn't 2 strings in the 'FirstName LastName,FirstName LastName' format"
+
         # Reorder the edge tuple
         _e = tuple(sorted((_f, _t), key=itemgetter(0, 1)))
         edges.add(_e)

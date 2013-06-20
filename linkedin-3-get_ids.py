@@ -28,7 +28,7 @@ OAUTH_TOKEN_SECRET = "e939a72d-8b7b-4278-bc05-f27014c20db3"
 
 start = 0 # Starting location within the result set for paginated returns. Ranges are specified with a starting index and a number of results (count) to return. 
 
-filename_ids = "linked_ids_total.csv" %
+filename_ids = "linked_ids_compare.csv" 
 
 def firstDegreeConnections():
 	# Use your credentials to build the oauth client

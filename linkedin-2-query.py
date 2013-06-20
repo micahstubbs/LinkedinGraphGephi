@@ -19,13 +19,14 @@ except ImportError:
 import oauth2 as oauth 
 import urlparse
 import codecs
+import shutil
 
 CONSUMER_KEY = "js6zocdd9j86"
 CONSUMER_SECRET = "alkyBWF4yidK20sb"
 OAUTH_TOKEN = "be8fa919-c03a-465b-b4b8-631cf4cd5eb9"
 OAUTH_TOKEN_SECRET = "e939a72d-8b7b-4278-bc05-f27014c20db3"
 
-start = 1103 # Starting location within the result set for paginated returns. Ranges are specified with a starting index and a number of results (count) to return. 
+start = 1357 # Starting location within the result set for paginated returns. Ranges are specified with a starting index and a number of results (count) to return. 
 count = 500 #number of results to return. You may specify any number. Default and max page size is 500. Implement pagination to retrieve more than 500 connections.
 #end = start + count - 1
 
@@ -44,7 +45,7 @@ def linkedin_connections():
 	# daily limit per developer is 500 calls to the "People Search" API
 	# http://developer.linkedin.com/documents/throttle-limits
 	counter_GetConnectionProfile_APIcall = 0
-	cap_GCP_APIcalls = 2
+	cap_GCP_APIcalls = 500
 
 	# track how many connections been queried
 	counter_results = 0
@@ -74,9 +75,9 @@ def linkedin_connections():
 
 	# Loop thru the 1st degree connections and see how they connect to each other 
 	for result in results.get("values", "NA"):
-
+		#if result["id"] == "CjLypibuy8":
 		resultId = result["id"]
-		#resultId = 
+		#resultId = CjLypibuy8
 
 		con = "%s %s" % (result["firstName"].replace(",", " "), result["lastName"].replace(",", " "))
 		print >>output, "%s,%s" % ("Micah Stubbs", con)
@@ -131,9 +132,9 @@ def linkedin_connections():
 				print "API Call limit reached. %d call%s made to LinkedIn's Get Connection Profile API" % (counter_GetConnectionProfile_APIcall, "s"[counter_GetConnectionProfile_APIcall==1:])
 
 				if (relatedConnectionsTotal) > (mutualConnectionsStart + 20):
-					z = counter_results - 2
+					z = counter_results - 1
 				else:
-					z = counter_results - 1 
+					z = counter_results 
 
 				print "complete set of mutual connections retrieved for %d connection%s" % (z, "s"[z==1:])
 				return
