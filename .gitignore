@@ -1,9 +1,1 @@
-# ignore all files ending with .csv, .json, .gephi or .png
-*.csv
-*.json
-*.png
-*.gephi
-
-deprecated/
-test/
-"retrieved data store"/
+inactive/**
