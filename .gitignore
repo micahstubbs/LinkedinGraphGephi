@@ -1,1 +1,13 @@
+<<<<<<< HEAD
 inactive/**
+=======
+# ignore all files ending with .csv, .json, .gephi or .png
+*.csv
+*.json
+*.png
+*.gephi
+
+deprecated/
+test/
+"retrieved data store"/
+>>>>>>> f31b4ee84bdeeb50ee80dd5248ccc74e3a29d6e9

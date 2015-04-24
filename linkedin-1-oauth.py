@@ -17,8 +17,13 @@ http://developer.linkedin.com/documents/authentication
 import oauth2 as oauth
 import urlparse
 
+<<<<<<< HEAD
 consumer_key = "js6zocdd9j86" #API Key
 consumer_secret = "alkyBWF4yidK20sb" #Secret Key
+=======
+consumer_key = "your-api-key" #API Key
+consumer_secret = "your-secret-key" #Secret Key
+>>>>>>> f31b4ee84bdeeb50ee80dd5248ccc74e3a29d6e9
 
 class LinkedIn(object):
 
